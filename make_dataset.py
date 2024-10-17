@@ -2,12 +2,10 @@ from pathlib import Path
 
 import fiftyone as fo
 import exifread
-from PIL import Image
-import exiftool
 
 
 # this is the name the for the dataset inside 51
-name = "my-dataset"
+name = "photo_album"
 
 # this is the path where the images are located
 source_image_dir = "/home/spousty/data/ai-ready-images"
@@ -37,17 +35,35 @@ def simple_import_and_create():
 # 'EXIF SubjectDistance'
 # 'EXIF FocalLength'
 
-def import_and_create_with_metadata():
-    exif_fields = ["Image Model", "EXIF ExposureTime", "EXIF FNumber", "EXIF DateTimeOriginal", "EXIF ShutterSpeedValue",
+def import_and_create_with_fields():
+
+    dataset = fo.Dataset(name, overwrite=True)
+
+    relevant_exif_fields = ["Image Model", "EXIF ExposureTime", "EXIF FNumber", "EXIF DateTimeOriginal", "EXIF ShutterSpeedValue",
                    "EXIF ApertureValue", "EXIF Flash", "EXIF SensingMethod", "EXIF SubjectDistance", "EXIF FocalLength"]
     path = Path(source_image_dir)
-    for sample in path.rglob('*.JPG'):
-        f = open(sample, 'rb')
-        tags = exifread.process_file(f)
-        for field in exif_fields:
-            if field in exif_fields and tags.get(field) is not None:
-                print("got one: " + field + " : " + str(tags[field]) )
-        print("maybe")
+    samples = []
+
+    for sample_file in path.rglob('*.JPG'):
+        exif_fields = {}
+        f = open(sample_file, 'rb')
+        try:
+            tags = exifread.process_file(f)
+            for field in relevant_exif_fields:
+                if field in relevant_exif_fields and tags.get(field) is not None:
+                    exif_fields[field] = tags.get(field)
+            # We have built our dict of exif info. Time to make the sample
+            sample = fo.Sample(filepath = sample_file, **exif_fields)
+            # Now add that sample to the list of samples
+            samples.append(sample)
+        except:
+            print("The file: " + str(sample_file) +  " the follow exif data threw an exception" + str(tags))
+            pass
+        f.close()
+
+    # We have gone through all the files and created a List of samples. Time to add them to the dataset
+    dataset.add_samples(samples)
+    dataset.save()
 
 
 
@@ -61,6 +77,6 @@ def start_fiftyone():
 
 if __name__ == "__main__":
     print("reading in data")
-    import_and_create_with_metadata()
+    import_and_create_with_fields()
     start_fiftyone()
     print("done")
