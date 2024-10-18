@@ -51,7 +51,7 @@ def import_and_create_with_fields():
             tags = exifread.process_file(f)
             for field in relevant_exif_fields:
                 if field in relevant_exif_fields and tags.get(field) is not None:
-                    exif_fields[field] = tags.get(field)
+                    exif_fields[field] = str(tags.get(field))
             # We have built our dict of exif info. Time to make the sample
             sample = fo.Sample(filepath = sample_file, **exif_fields)
             # Now add that sample to the list of samples
