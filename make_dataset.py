@@ -1,3 +1,4 @@
+from doctest import debug
 from pathlib import Path
 
 import fiftyone as fo
@@ -37,7 +38,7 @@ def simple_import_and_create():
 
 def import_and_create_with_fields():
 
-    dataset = fo.Dataset(name, overwrite=True)
+    dataset = fo.Dataset(name, overwrite=True, persistent=True)
 
     relevant_exif_fields = ["Image Model", "EXIF ExposureTime", "EXIF FNumber", "EXIF DateTimeOriginal", "EXIF ShutterSpeedValue",
                    "EXIF ApertureValue", "EXIF Flash", "EXIF SensingMethod", "EXIF SubjectDistance", "EXIF FocalLength"]
@@ -48,7 +49,7 @@ def import_and_create_with_fields():
         exif_fields = {}
         f = open(sample_file, 'rb')
         try:
-            tags = exifread.process_file(f)
+            tags = exifread.process_file(f, details=False)
             for field in relevant_exif_fields:
                 if field in relevant_exif_fields and tags.get(field) is not None:
                     exif_fields[field] = str(tags.get(field))
