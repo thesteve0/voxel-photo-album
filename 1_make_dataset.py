@@ -79,5 +79,5 @@ def start_fiftyone():
 if __name__ == "__main__":
     print("reading in data")
     import_and_create_with_fields()
-    start_fiftyone()
+    #start_fiftyone()
     print("done")
