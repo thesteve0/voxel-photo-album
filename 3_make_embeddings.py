@@ -19,7 +19,7 @@ if __name__ == "__main__":
     model2 = foz.load_zoo_model("vgg11-bn-imagenet-torch")
     fob.compute_visualization(training_view, model=model2, embeddings="fvgg11_bn", brain_key="vgg11_bn_embed")
 
-    session = fo.launch_app(dataset)
+    session = fo.launch_app(training_view)
     session.wait()
 
     print("done")
