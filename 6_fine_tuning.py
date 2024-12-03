@@ -1,6 +1,15 @@
-import wandb
-from plotly.validators.layout.slider import StepsValidator
+# import argparse
+import os
+import tempfile
+import torch
+from ultralytics import YOLO
+# from ultralytics import settings
+import fiftyone as fo
+# import wandb
+from wandb.sdk.verify.verify import PROJECT_NAME
+
 """
+All of this (except the data specific part) is from Jacob M
 
 Ultralytics YOLOv8*-cls model training script
 for generating confidence-based noise labels for a dataset.
@@ -10,20 +19,22 @@ for generating confidence-based noise labels for a dataset.
 |
 
 Requires `ultralytics` and `fiftyone>=0.25.0` to be installed.
+---------------
+Steve says: 
+"I was going to to start with the imgsz =640x640 by resizing to 860x860 and then crop to 640x640. I can't
+do this because the image size below is just a magic number we set with the Yolo library. It says it 
+will just resize to that size but doesn't tell us how. So instead, to start with, I am just setting this to 640.
+I am also setting the model size to nano, but will bump it up over time.
 """
-import argparse
-import os
-import tempfile
-import torch
-from ultralytics import YOLO
-from ultralytics import settings
-import fiftyone as fo
 
-DEFAULT_MODEL_SIZE = "s"
-DEFAULT_IMAGE_SIZE = 128
-DEFAULT_EPOCHS = 10
 
-wandb.require("core")
+DATASET_NAME = 'labeled_dataset'
+DEFAULT_MODEL_SIZE = "x"
+DEFAULT_IMAGE_SIZE = 704
+DEFAULT_EPOCHS = 12
+PROJECT_NAME = 'sp_photos_yolo11'
+
+# wandb.require("core")
 
 
 def get_torch_device():
@@ -47,9 +58,11 @@ def train_classifier(
         **kwargs
 ):
 
-    settings.update({"wandb": False})
+    # settings.update({"wandb": False})
     if dataset_name:
         dataset = fo.load_dataset(dataset_name)
+        dataset.take(0.2 * len(dataset)).tag_samples("test")
+        dataset.match_tags("test", bool=False).tag_samples("train")
         train = dataset.match_tags("train")
         test = dataset.match_tags("test")
     else:
@@ -80,7 +93,7 @@ def train_classifier(
         )
 
     # Load a pre-trained YOLOv8 model for classification
-    model = YOLO(f"yolov8{model_size}-cls.pt")
+    model = YOLO(f"yolo11{model_size}-cls.pt")
 
     # Train the model
     model.train(
@@ -107,11 +120,11 @@ def main():
     # args = parser.parse_args()
 
     train_classifier(
-        dataset_name=args.dataset_name,
-        model_size=args.model_size,
-        image_size=args.image_size,
-        epochs=args.epochs,
-        project_name=args.project_name,
+        dataset_name=DATASET_NAME,
+        # model_size=args.model_size,
+        # image_size=args.image_size,
+        # epochs=args.epochs,
+        project_name=PROJECT_NAME,
     )
 
 
