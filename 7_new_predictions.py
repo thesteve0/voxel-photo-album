@@ -76,7 +76,7 @@ if __name__ == '__main__':
     candidate_data = split_again(whole_dataset,first_training)
     print("about to predict")
     results = run_predictions(candidate_data)
-    for r in results[0]:
+    for r in results:
         # we save the data to a 51 dataset. Now that we are done exploring, I think we might want to clone above.
        r.save()
     # for r2 in results[1]:
