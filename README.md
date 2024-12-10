@@ -14,3 +14,23 @@ Here are the general steps we want to accomplish
 ## Order to run things
 1. First run make_dataset.py to make the dataset in FiftyOne
 2. Now run make_embeddings.py to create all the embeddings
+
+#### The classes I am going for
+"boy"
+"girl"
+"man"
+"woman"
+"people"
+"dog"
+"cat"
+"bird"
+"insect"
+"monkey"
+"crustacean",
+"fish"
+"animal"
+"plant"
+"flower"
+"landscape"
+"architecture"
+"not an animal, plant, landscape, person, or building"
