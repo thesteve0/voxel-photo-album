@@ -3,9 +3,7 @@ import os
 import tempfile
 import torch
 from ultralytics import YOLO
-# from ultralytics import settings
 import fiftyone as fo
-# import wandb
 from wandb.sdk.verify.verify import PROJECT_NAME
 
 """
@@ -21,12 +19,11 @@ for generating confidence-based noise labels for a dataset.
 Requires `ultralytics` and `fiftyone>=0.25.0` to be installed.
 ---------------
 Steve says: 
-"I was going to to start with the imgsz =640x640 by resizing to 860x860 and then crop to 640x640. I can't
+"//I was going to to start with the imgsz =640x640 by resizing to 860x860 and then crop to 640x640//. I can't
 do this because the image size below is just a magic number we set with the Yolo library. It says it 
 will just resize to that size but doesn't tell us how. So instead, to start with, I am just setting this to 640.
-I am also setting the model size to nano, but will bump it up over time.
+I am also setting the model size to nano, but will bump it up over time. Settled on X - it doesn't take much longer and does better
 """
-
 
 DATASET_NAME = 'labeled_dataset'
 DEFAULT_MODEL_SIZE = "x"
@@ -34,7 +31,6 @@ DEFAULT_IMAGE_SIZE = 704
 DEFAULT_EPOCHS = 12
 PROJECT_NAME = 'sp_photos_yolo11'
 
-# wandb.require("core")
 
 
 def get_torch_device():

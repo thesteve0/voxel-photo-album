@@ -1,3 +1,11 @@
+@@TODO I need to rename the datasets, and their references in code, to make more sense
+The way to rename a dataset is
+```python
+import fiftyone as fo
+dataset = fo.load_dataset("foo")
+dataset.name = "footwo"
+```
+
 # voxel-photo-album
 
 Here are the general steps we want to accomplish
