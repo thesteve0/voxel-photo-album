@@ -26,4 +26,15 @@ def get_torch_device():
 if __name__ == '__main__':
     print("starting")
 
+    """
+    PREP DATA
+    0. check to see if the dataset we are about to make exists, if so delete it
+    1. clone one of the datasets but do NOT make it persistent
+    2. then add the other samples to the first dataset
+    first_dataset.add_samples(second_dataset.view())
+    3. Now we are ready to train using the ground_truth field
+    
+    TRAIN MODEL
+    """
+
     print("finished")
