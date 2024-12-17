@@ -1,3 +1,26 @@
+I got lost in the challenge of finding good classes and forgot my main goal.
+My goals was to quickly find the raw images I wanted to work with for production.
+This is not, given photos of dogs, which breed is it. This is, here is a general photo that could be of anything, do I care 
+about it.
+
+I only need minimal classes for that:
+1. I could simply do - People vs Not people
+2. Or I could do people, animal, plant, landscape, buildings
+
+People means there is a person in the photo. Even if the people are small or singular in the picture it should be considered 
+a people picture.
+
+For the second scheme, this will be more dependent on my deciding what is the intended subject of the photo. For example,
+a plant with an insect centered on it would be insect. 
+
+THere is an open question about how to handle photos that I am just not interested in, like a picture of a box or a picture from
+a doorway but just is not interesting for development. There are no people in the picture and there is not one of the classes I am interested in. I think this is basically teaching the model my concept of uninteresting. 
+
+Doing it with the 16 classes lead to overlapping categories and unclean labeling. This in turn led to poor model performance
+but for "understandble" reasons. This was not a problem with the models but a problem with data prep
+
+Markus gave the suggestion - which is a really good one - to run this in two stages. First, train a model for people not people. Then for the not-people use that data to train a multi-class model
+
 @@TODO I need to rename the datasets, and their references in code, to make more sense
 The way to rename a dataset is
 ```python
